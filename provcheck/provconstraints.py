@@ -1210,20 +1210,20 @@ def orderingConstraints(g):
     processUpdate(g, actedOnBehalfOf_ordering2)
     return g
 
-def checkUniqueness (g):
+def checkUniqueness(g):
     queries = [unique_generation, unique_invalidation,
                unique_wasStartedBy,
                unique_wasEndedBy,
                unique_startTime,
                unique_endTime]
     for q in queries:
-        if not check(g,q) :
+        if not check(g, q):
             print('uniqueness')
             return False
 
     return True
 
-def checkImpossibility (g):
+def checkImpossibility(g):
     queries = [impossible_unspecified_derivation_generation_use,
                impossible_specializaton_reflexive,
                impossible_property_overlap,
@@ -1231,13 +1231,13 @@ def checkImpossibility (g):
                entity_activity_disjoint,
                membership_empty_collection]
     for q in queries:
-        if not check(g,q) :
+        if not check(g, q):
             print('impossibility')
             return False
 
     return True
 
-def checkKeyConstraints (g):
+def checkKeyConstraints(g):
     queries = [key_generation,
                key_used,
                key_communication,
@@ -1248,15 +1248,15 @@ def checkKeyConstraints (g):
                key_attribution,
                key_association,
                key_delegation,
-               key_influence  ]
+               key_influence]
     for q in queries:
-        if not check(g,q) :
+        if not check(g, q):
             print('keyconstraints')
             return False
 
     return True
 
-def checkTypeConstraints (g):
+def checkTypeConstraints(g):
     queries = [type_used,
                type_attribution,
                type_communication,
@@ -1265,9 +1265,9 @@ def checkTypeConstraints (g):
                type_influence,
                type_association,
                merge_generation,
-               merge_start ]
+               merge_start]
     for q in queries:
-        if not check(g,q) :
+        if not check(g, q):
             print('typeconstraints')
             return False
 
@@ -1284,10 +1284,10 @@ def check(g, q):
     else:
         return True
 
-def checkCycle (g):
+def checkCycle(g):
     g1 = orderingConstraints(g)
     res = check(g1, qCheckCycle)
-    if not res :
+    if not res:
         print('cycle')
     return res
 
@@ -1297,12 +1297,16 @@ def validate(filename):
     g.parse(filename, format='turtle')
     #print g.serialize(format='turtle')
 
-    result = checkTypeConstraints(g) and checkKeyConstraints(g) and checkCycle(g) and checkUniqueness(g) and checkImpossibility(g)
+    result = checkTypeConstraints(g) and \
+                checkKeyConstraints(g) and \
+                checkCycle(g) and \
+                checkUniqueness(g) and \
+                checkImpossibility(g)
     print(filename + ' ' + str(result))
-    if result == True :
-        return('PASS')
-    else :
-        return('FAIL')
+    if result == True:
+        return 'PASS'
+    else:
+        return 'FAIL'
 
 
     #print g.serialize(format='turtle')
@@ -1321,7 +1325,7 @@ def testAllConstraints(dirs):
         if f.endswith('.ttl'):
             numberoftestcases = numberoftestcases + 1
             res = validate(dirs + f)
-            if not (res in f):
+            if not res in f:
                 print("Not correct")
                 notcorrect = notcorrect + 1
 
